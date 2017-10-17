@@ -1,6 +1,6 @@
 import React from 'react';
 import PatientRow from './PatientRow.jsx';
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Button} from 'react-bootstrap';
 import {browserHistory} from 'react-router-dom';
 import Search from '../common/Search.jsx';
 import {debounce} from 'lodash';
@@ -8,28 +8,13 @@ import {debounce} from 'lodash';
 export default class PatientList extends React.Component {
   constructor() {
     super();
-    this.state = { query: "", patients: [] };
+    this.state = { query: "", patients: [], createPatient: false };
   }
 
-  componentWillMount(){
+  componentDidMount(){
     this.search = debounce((val) => {
-      fetch("http://localhost:3000/patients/search/" + val, {
-      method: "GET"
-    }).then((response) => {
-      return response.json();
-    }).then((body) => {
-      this.setState({
-        patients: body.patients.map(pat => {return {_id: pat._id,
-        firstName: pat.firstName,
-        lastName: pat.lastName,
-        email: pat.email,
-        dateOfBirth: pat.dateOfBirth,
-        phoneNumber: pat.phoneNumber}})
-      });
-    });
-    }, 1000)
-
-    fetch("http://localhost:3000/patients", {
+      let url = this.state.query.length>0? "http://localhost:3000/patients/search/" + val:"http://localhost:3000/patients";
+      fetch(url, {
       method: "GET"
     }).then((response) => {
       return response.json();
@@ -38,11 +23,27 @@ export default class PatientList extends React.Component {
         patients: body.patients
       });
     });
+    }, 1000)
+    this.search();
+    // fetch("http://localhost:3000/patients", {
+    //   method: "GET"
+    // }).then((response) => {
+    //   return response.json();
+    // }).then((body) => {
+    //   this.setState({
+    //     patients: body.patients
+    //   });
+    // });
   }
+
 
   onInputChange(val){
     this.setState({query: val});
     this.search(val);
+  }
+
+  createPatient(){
+    this.setState({ createPatient: true });
   }
 
   render() {
@@ -51,8 +52,11 @@ export default class PatientList extends React.Component {
           <h2>Patients</h2>
         </Row>
         <Row className="show-grid">
-          <Col xs={12} md={6}>
+          <Col xs={10} md={6}>
             <Search onInputChange={this.onInputChange.bind(this)} query={this.state.query}/>
+          </Col>
+          <Col xs={2} md={2}>
+            <Button onClick={this.createPatient.bind(this)}>Create new</Button>
           </Col>
         </Row>
         <Row className="show-grid">
@@ -63,8 +67,10 @@ export default class PatientList extends React.Component {
           <Col xs={2} md={2}>Phone number</Col>
           <Col xs={2} md={2}>Actions</Col>
         </Row>
-        {this.state.patients.map((patient) => {
-          return <PatientRow patient={patient} />;
+        { this.state.createPatient ? <PatientRow patient={{}} editMode={true}/> : null }
+        { this.state.patients.map((patient) => {
+          /*return <Row className="show-grid"><Col xs={2} md={2}><span>{patient.firstName}</span></Col></Row>;*/
+          return <PatientRow patient={patient} editMode={false}/>;
         })}
       </Grid>;
   }

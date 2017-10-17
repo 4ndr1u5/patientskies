@@ -4,9 +4,17 @@ import {Row, Col, Button, FormControl} from 'react-bootstrap';
 export default class PatientRow extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { edit:false,
+    this.state = { edit: this.props.editMode,
       patient: this.props.patient
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(this.props.patient._id !== nextProps.patient._id){
+      this.setState({
+        patient: nextProps.patient
+      });
+    }
   }
 
   setEditMode(){
@@ -16,7 +24,8 @@ export default class PatientRow extends React.Component {
   }
 
   saveRecord(){
-    fetch("http://localhost:3000/patients/" + this.state.patient._id, {
+    let url = this.state.patient._id ? "http://localhost:3000/patients/" + this.state.patient._id: "http://localhost:3000/patients/add" ;
+    fetch(url, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -32,10 +41,9 @@ export default class PatientRow extends React.Component {
   }
 
   onInputChange(prop, val){
-    console.log(val);
-    let patient = Object.assign({}, this.state.patient);
-    patient[prop] = val;
-    this.setState({patient});
+    // let patient = Object.assign({}, this.state.patient);
+    // patient[prop] = val;
+    // this.setState({patient});
   }
 
   renderEditMode(id){
