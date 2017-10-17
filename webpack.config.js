@@ -12,11 +12,11 @@ module.exports = {
             exclude: /(node_modules|bower_components)/,
             loader: 'babel-loader',
             query: {
-                presets: ['react', 'es2015']
+                presets: ['react', 'es2015', 'react-hmre']
             }
         }, {
             test: /\.jsx$/,
-            exclude: /node_modules/,
+            exclude: /(node_modules|bower_components)/,
             loaders: ['babel-loader', 'eslint-loader']
         }, {
             test: /\.less$/,
