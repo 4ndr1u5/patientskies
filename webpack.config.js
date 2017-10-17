@@ -15,6 +15,10 @@ module.exports = {
                 presets: ['react', 'es2015']
             }
         }, {
+            test: /\.jsx$/,
+            exclude: /node_modules/,
+            loaders: ['babel-loader', 'eslint-loader']
+        }, {
             test: /\.less$/,
             loaders: ['style-loader', 'css-loader', 'less-loader']
         }]
