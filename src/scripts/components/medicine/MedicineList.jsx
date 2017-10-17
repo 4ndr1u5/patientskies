@@ -1,6 +1,7 @@
 import React from 'react';
 import {Grid, Row, Col, Button, FormControl} from 'react-bootstrap';
 import MedicineRow from './MedicineRow.jsx';
+import Search from '../common/Search.jsx';
 import {debounce} from 'lodash';
 
 export default class MedicineList extends React.Component {
@@ -17,21 +18,20 @@ export default class MedicineList extends React.Component {
     }).then((response) => {
       return response.json();
     }).then((body) => {
-      console.log(body);
       this.setState({
         medicine: body.map(med => {return {productName: med.productName,
         typeName: med.typeName,
         form: med.form,
         atcName: med.atcName,
-        atcCatName: med.atcCatName,}})
+        atcCatName: med.atcCatName}})
       });
     });
     }, 1000)
   }
 
   onInputChange(val){
-    this.search(val);
     this.setState({query: val});
+    this.search(val);
   }
 
   render() {
@@ -41,7 +41,7 @@ export default class MedicineList extends React.Component {
         </Row>
         <Row className="show-grid">
           <Col xs={12} md={6}>
-            <FormControl type='text' onChange={e => {this.onInputChange(e.target.value)}} value={this.state.query}/>
+            <Search onInputChange={this.onInputChange.bind(this)} query={this.state.query}/>
           </Col>
         </Row>
         <Row className="show-grid">

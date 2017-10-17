@@ -116,29 +116,47 @@ app.get('/patients/:id', function(req, res) {
 
 app.post('/patients/:id', function(req, res) {
     return PatientModel.findById(req.params.id, function(err, patient_data) {
-      patient_data.firstName = req.body.firstName;
-      patient_data.lastName = req.body.lastName;
-      patient_data.email = req.body.email;
-      patient_data.dateOfBirth = req.body.dateOfBirth;
-      patient_data.phoneNumber = req.body.phoneNumber;
-      return patient_data.save(function(err) {
-          if (!err) {
-              console.log("updated");
-              return res.send(JSON.stringify({
-                  status: 'success',
-                  data: patient_data
-              }));
-          } else {
-              return console.log(err);
-          }
-          res.redirect('/patients/', 301);
-      });
+        patient_data.firstName = req.body.firstName;
+        patient_data.lastName = req.body.lastName;
+        patient_data.email = req.body.email;
+        patient_data.dateOfBirth = req.body.dateOfBirth;
+        patient_data.phoneNumber = req.body.phoneNumber;
+        return patient_data.save(function(err) {
+            if (!err) {
+                console.log("updated");
+                return res.send(JSON.stringify({
+                    status: 'success',
+                    data: patient_data
+                }));
+            } else {
+                return console.log(err);
+            }
+            res.redirect('/patients/', 301);
+        });
     });
+});
+
+app.get('/patients/search/:query', function(req, res) {
+    console.log(req.params.query);
+    return PatientModel.find({
+            $or: [{ firstName: req.params.query }, { lastName: req.params.query }, { email: req.params.query }]
+        },
+        function(err, patients) {
+            if (!err) {
+                return res.send(JSON.stringify({
+                    patients: patients,
+                    title: 'Patients'
+                }));
+            } else {
+                return console.log(err);
+            }
+
+        });
 });
 
 app.get('/medicine/:query', function(req, res) {
     return request({
-      uri: '  https://fest-searcher.herokuapp.com/api/fest/s/' + req.params.query,
+        uri: 'https://fest-searcher.herokuapp.com/api/fest/s/' + req.params.query,
     }).pipe(res);
 });
 
