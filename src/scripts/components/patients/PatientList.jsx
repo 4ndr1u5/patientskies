@@ -6,6 +6,19 @@ export default class PatientList extends React.Component {
   constructor() {
     super();
     this.onClick = this.handleSubmit.bind(this);
+    this.state = { patients: [] };
+  }
+
+  componentWillMount(){
+    fetch("http://localhost:3000/patients", {
+      method: "GET"
+    }).then((response) => {
+      return response.json();
+    }).then((body) => {
+      this.setState({
+        patients: body.patients
+      });
+    });
   }
 
   /* eslint class-methods-use-this: ["error", { "exceptMethods": ["handleSubmit"] }] */
@@ -25,10 +38,6 @@ export default class PatientList extends React.Component {
   }
 
   render() {
-    var rows = [];
-    for (var i=0; i < 4; i++) {
-      rows.push(<PatientRow />);
-    }
     return <div>
       <h2>PatientList</h2>
       <Grid>
@@ -38,7 +47,9 @@ export default class PatientList extends React.Component {
           <Col xs={3} md={3}>Date of birth</Col>
           <Col xs={3} md={3}>Phone number</Col>
         </Row>
-        {rows}
+        {this.state.patients.map((patient) => {
+          return <PatientRow patient={patient}/>;
+        })}
       </Grid>
       <button onClick={this.onClick}>POST</button>
     </div>;
