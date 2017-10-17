@@ -20,22 +20,12 @@ export default class PatientList extends React.Component {
       return response.json();
     }).then((body) => {
       this.setState({
-        patients: body.patients
+        patients: body.patients,
       });
     });
     }, 1000)
     this.search();
-    // fetch("http://localhost:3000/patients", {
-    //   method: "GET"
-    // }).then((response) => {
-    //   return response.json();
-    // }).then((body) => {
-    //   this.setState({
-    //     patients: body.patients
-    //   });
-    // });
   }
-
 
   onInputChange(val){
     this.setState({query: val});
@@ -69,7 +59,6 @@ export default class PatientList extends React.Component {
         </Row>
         { this.state.createPatient ? <PatientRow patient={{}} editMode={true}/> : null }
         { this.state.patients.map((patient) => {
-          /*return <Row className="show-grid"><Col xs={2} md={2}><span>{patient.firstName}</span></Col></Row>;*/
           return <PatientRow patient={patient} editMode={false}/>;
         })}
       </Grid>;

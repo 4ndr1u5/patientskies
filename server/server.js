@@ -20,6 +20,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "DELETE");
     next();
 });
 app.use(bodyParser.json()); // to support JSON-encoded bodies
@@ -75,7 +76,6 @@ app.get('/patients/add', function(req, res) {
 });
 
 app.post('/patients/add', function(req, res) {
-    console.log(req.body);
     var patient;
 
     patient = new PatientModel({
@@ -85,7 +85,6 @@ app.post('/patients/add', function(req, res) {
         dateOfBirth: req.body.dateOfBirth,
         phoneNumber: req.body.phoneNumber
     });
-    console.log(patient);
 
     patient.save(function(err) {
         if (!err) {
@@ -137,7 +136,6 @@ app.post('/patients/:id', function(req, res) {
 });
 
 app.get('/patients/search/:query', function(req, res) {
-    console.log(req.params.query);
     return PatientModel.find({
             $or: [{ firstName: req.params.query }, { lastName: req.params.query }, { email: req.params.query }]
         },
@@ -150,7 +148,27 @@ app.get('/patients/search/:query', function(req, res) {
             } else {
                 return console.log(err);
             }
+        });
+});
 
+
+app.delete('/patients/:id', function(req, res) {
+console.log("DELETE", req.params.id)
+    return PatientModel.findById(req.params.id)
+        .exec(function(err, doc) {
+            if (err || !doc) {
+                res.statusCode = 404;
+                res.send({});
+            } else {
+                doc.remove(function(err) {
+                    if (err) {
+                        res.statusCode = 403;
+                        res.send(err);
+                    } else {
+                        res.send({});
+                    }
+                });
+            }
         });
 });
 

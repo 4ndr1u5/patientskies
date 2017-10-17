@@ -23,6 +23,19 @@ export default class PatientRow extends React.Component {
     });
   }
 
+  deletePatient(){
+    fetch("http://localhost:3000/patients/" + this.state.patient._id, {
+      method: "delete"
+    }).then((response) => {
+      return response.json();
+    }).then((body) => {
+      this.setState({
+        deleted: true
+      });
+      console.log(body);
+    });
+  }
+
   saveRecord(){
     let url = this.state.patient._id ? "http://localhost:3000/patients/" + this.state.patient._id: "http://localhost:3000/patients/add" ;
     fetch(url, {
@@ -64,12 +77,18 @@ export default class PatientRow extends React.Component {
       <Col xs={2} md={2}>{this.state.patient.email}</Col>
       <Col xs={2} md={2}>{this.state.patient.dateOfBirth}</Col>
       <Col xs={2} md={2}>{this.state.patient.phoneNumber}</Col>
-      <Col xs={2} md={2}><Button onClick={this.setEditMode.bind(this)}>Edit</Button></Col>
+      <Col xs={2} md={2}>
+        <Button onClick={this.setEditMode.bind(this)}>Edit</Button>
+        <Button onClick={this.deletePatient.bind(this)}>Delete</Button>
+      </Col>
     </Row>
   }
 
   render() {
-    {if (this.state.edit){
+    {if(this.state.deleted){
+      return null;
+    }
+    else if (this.state.edit){
       return this.renderEditMode();
     }
     else{
