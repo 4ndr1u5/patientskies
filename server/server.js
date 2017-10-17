@@ -2,7 +2,8 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
+const request = require('request');
 
 //Set up default mongoose connection
 var mongoDB = 'mongodb://paprikosas:vienas11@ds121575.mlab.com:21575/patientskies';
@@ -59,7 +60,7 @@ app.get('/patients', function(req, res) {
 
 app.get('/patients/add', function(req, res) {
     var patient_data = {
-        _id: "",
+        // _id: "",
         firstName: "",
         lastName: "",
         email: "",
@@ -89,12 +90,12 @@ app.post('/patients/add', function(req, res) {
     patient.save(function(err) {
         if (!err) {
             console.log("created");
-            res.send(JSON.stringify({
+            return res.send(JSON.stringify({
                 status: 'success',
                 data: patient
             }));
         } else {
-            console.log(err);
+            return console.log(err);
         }
     });
 });
@@ -114,27 +115,33 @@ app.get('/patients/:id', function(req, res) {
 });
 
 app.post('/patients/:id', function(req, res) {
-
     return PatientModel.findById(req.params.id, function(err, patient_data) {
-        patient_data.firstName = req.body.firstName;
-        patient_data.lastName = req.body.lastName;
-        patient_data.email = req.body.email;
-        patient_data.dateOfBirth = req.body.dateOfBirth;
-        patient_data.phoneNumber = req.body.phoneNumber;
-        return patient_data.save(function(err) {
-            if (!err) {
-                console.log("updated");
-                res.send(JSON.stringify({
-                    status: 'success',
-                    data: patient_data
-                }));
-            } else {
-                console.log(err);
-            }
-            res.redirect('/patients/', 301);
-        });
+      patient_data.firstName = req.body.firstName;
+      patient_data.lastName = req.body.lastName;
+      patient_data.email = req.body.email;
+      patient_data.dateOfBirth = req.body.dateOfBirth;
+      patient_data.phoneNumber = req.body.phoneNumber;
+      return patient_data.save(function(err) {
+          if (!err) {
+              console.log("updated");
+              return res.send(JSON.stringify({
+                  status: 'success',
+                  data: patient_data
+              }));
+          } else {
+              return console.log(err);
+          }
+          res.redirect('/patients/', 301);
+      });
     });
 });
+
+app.get('/medicine/:query', function(req, res) {
+    return request({
+      uri: '  https://fest-searcher.herokuapp.com/api/fest/s/' + req.params.query,
+    }).pipe(res);
+});
+
 
 app.listen(3000, function() {
     console.log('Example app listening on port 3000!');
