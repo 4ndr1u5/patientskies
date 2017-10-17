@@ -31,11 +31,6 @@ app.get('/', function(req, res) {
     res.send('Got a GET request');
 });
 
-// app.post('/', function(req, res) {
-//     console.log('Got a POST request');
-//     res.send('Got a POST request');
-// })
-
 var Schema = mongoose.Schema;
 
 var Patient = new Schema({
@@ -45,7 +40,6 @@ var Patient = new Schema({
     dateOfBirth: { type: String, required: true },
     phoneNumber: { type: String, required: true }
 });
-
 
 var PatientModel = mongoose.model('Patient', Patient);
 
@@ -100,13 +94,9 @@ app.post('/patients/add', function(req, res) {
                 data: patient
             }));
         } else {
-            //TODO: return page with errors
             console.log(err);
         }
     });
-    //TODO: return to list page, if saved
-    //res.redirect('/patients/', 301);
-    //return res.send(patient);
 });
 
 app.get('/patients/:id', function(req, res) {
@@ -121,7 +111,6 @@ app.get('/patients/:id', function(req, res) {
             console.log(err);
         }
     });
-
 });
 
 app.post('/patients/:id', function(req, res) {
