@@ -3,6 +3,7 @@ import { Grid, Row, Col, Button, FormControl } from 'react-bootstrap';
 import MedicineRow from './MedicineRow.jsx';
 import Search from '../common/Search.jsx';
 import { debounce } from 'lodash';
+import MedicineApi from '../../api/medicine.js';
 
 export default class MedicineList extends React.Component {
   constructor(props) {
@@ -15,28 +16,22 @@ export default class MedicineList extends React.Component {
 
   componentWillMount() {
     this.search = debounce(val => {
-      fetch('http://localhost:3000/medicine/' + val, {
-        method: 'GET',
-      })
-        .then(response => {
-          return response.json();
-        })
-        .then(body => {
-          this.setState({
-            medicine: body.map(med => {
-              return {
-                id: med.id,
-                productName: med.productName,
-                typeName: med.typeName,
-                form: med.form,
-                atcName: med.atcName,
-                atcCatName: med.atcCatName,
-                substanceName: med.substanceName,
-                units: med.units,
-              };
-            }),
-          });
+      MedicineApi.search(val, medicine => {
+        this.setState({
+          medicine: medicine.map(med => {
+            return {
+              id: med.id,
+              productName: med.productName,
+              typeName: med.typeName,
+              form: med.form,
+              atcName: med.atcName,
+              atcCatName: med.atcCatName,
+              substanceName: med.substanceName,
+              units: med.units,
+            };
+          }),
         });
+      });
     }, 1000);
   }
 

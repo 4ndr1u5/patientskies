@@ -11,10 +11,9 @@ export default class PatientRow extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.state = {
+    this.setState({
       editMode: nextProps.editMode,
-      patient: nextProps.patient,
-    };
+    });
   }
 
   onInputChange(prop, val) {

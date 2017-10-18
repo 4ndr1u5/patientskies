@@ -1,4 +1,20 @@
 var PatientApi = (function() {
+	let getAllPatients = function(query, cb) {
+		let url =
+			query.length > 0
+				? 'http://localhost:3000/patients/search/' + val
+				: 'http://localhost:3000/patients';
+		fetch(url, {
+			method: 'GET',
+		})
+			.then(response => {
+				return response.json();
+			})
+			.then(body => {
+				cb(body.patients);
+			});
+	};
+
 	let deletePatient = function(patient, cb) {
 		fetch('http://localhost:3000/patients/' + patient._id, {
 			method: 'delete',
@@ -33,6 +49,7 @@ var PatientApi = (function() {
 	return {
 		deletePatient: deletePatient,
 		savePatient: savePatient,
+		getAllPatients: getAllPatients,
 	};
 })();
 

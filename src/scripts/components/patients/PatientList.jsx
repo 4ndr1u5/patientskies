@@ -4,6 +4,7 @@ import { Grid, Row, Col, Button } from 'react-bootstrap';
 import { browserHistory } from 'react-router-dom';
 import Search from '../common/Search.jsx';
 import { debounce } from 'lodash';
+import PatientApi from '../../api/patient.js';
 
 export default class PatientList extends React.Component {
   constructor() {
@@ -17,21 +18,11 @@ export default class PatientList extends React.Component {
 
   componentDidMount() {
     this.search = debounce(val => {
-      let url =
-        this.state.query.length > 0
-          ? 'http://localhost:3000/patients/search/' + val
-          : 'http://localhost:3000/patients';
-      fetch(url, {
-        method: 'GET',
-      })
-        .then(response => {
-          return response.json();
-        })
-        .then(body => {
-          this.setState({
-            patients: body.patients,
-          });
+      PatientApi.getAllPatients(this.state.query, patients => {
+        this.setState({
+          patients: patients,
         });
+      });
     }, 1000);
     this.search();
   }
@@ -47,24 +38,15 @@ export default class PatientList extends React.Component {
     this.setState({ newPatients: newPatients });
   }
 
-  assignMedicine(patient) {
-    fetch('http://localhost:3000/medicine/assign', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        medicine: this.props.medicineForAssign,
-        patient: patient,
-      }),
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(body => {
-        console.log(body);
-      });
-  }
+  // assignMedicine(patient) {
+  //   MedicineApi.assign(
+  //     this.props.medicineForAssign,
+  //     patient,
+  //     updatedPatient => {
+  //       this.setState({ patient: updatedPatient });
+  //     },
+  //   );
+  // }
 
   render() {
     return (
@@ -122,7 +104,7 @@ export default class PatientList extends React.Component {
               key={patient._id}
               patient={patient}
               editMode={false}
-              assignMedicine={this.assignMedicine.bind(this)}
+              medicineForAssign={this.props.medicineForAssign}
               actions={this.props.medicineForAssign ? 'assign' : 'CRUD'}
             />
           );

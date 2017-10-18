@@ -3,6 +3,7 @@ import { Row, Col, Button, FormControl } from 'react-bootstrap';
 import PatientRow from './PatientRow.jsx';
 import MedicineRow from '../medicine/MedicineRow.jsx';
 import PatientApi from '../../api/patient.js';
+import MedicineApi from '../../api/medicine.js';
 
 export default class Patient extends React.Component {
 	constructor(props) {
@@ -37,6 +38,16 @@ export default class Patient extends React.Component {
 				patient: data,
 			});
 		});
+	}
+
+	assignMedicine(patient) {
+		MedicineApi.assign(
+			this.props.medicineForAssign,
+			patient,
+			updatedPatient => {
+				this.setState({ patient: updatedPatient });
+			},
+		);
 	}
 
 	toggleAssignedMedicine() {
@@ -88,6 +99,7 @@ export default class Patient extends React.Component {
 					actions={this.props.actions}
 					savePatient={this.savePatient.bind(this)}
 					deletePatient={this.deletePatient.bind(this)}
+					assignMedicine={this.assignMedicine.bind(this)}
 				/>
 
 				{this.state.medicineShow &&
