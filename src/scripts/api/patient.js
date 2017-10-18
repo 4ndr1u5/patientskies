@@ -2,7 +2,7 @@ var PatientApi = (function() {
 	let getAllPatients = function(query, cb) {
 		let url =
 			query.length > 0
-				? 'http://localhost:3000/patients/search/' + val
+				? 'http://localhost:3000/patients/search/' + query
 				: 'http://localhost:3000/patients';
 		fetch(url, {
 			method: 'GET',

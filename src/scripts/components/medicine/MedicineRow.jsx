@@ -13,6 +13,8 @@ export default class PatientRow extends React.Component {
   render() {
     const AssignButton = withRouter(({ history }) => (
       <Button
+        className="row-button"
+        bsSize="xsmall"
         onClick={() => {
           this.props.onMedicineAssign(this.state.medicine);
           history.push('/medicine/assign');
@@ -23,7 +25,7 @@ export default class PatientRow extends React.Component {
     ));
 
     return (
-      <Row className="show-grid">
+      <Row className={this.props.className}>
         <Col xs={2} md={2}>
           {this.state.medicine.productName}
         </Col>

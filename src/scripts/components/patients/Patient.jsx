@@ -73,26 +73,31 @@ export default class Patient extends React.Component {
 	}
 
 	renderViewMode() {
+		let showMedicineButton = () => {
+			if (this.state.medicineShow) {
+				return (
+					<Button
+						className="row-button"
+						bsSize="xsmall"
+						onClick={this.toggleAssignedMedicine.bind(this)}
+					>
+						&#9650;
+					</Button>
+				);
+			} else {
+				return (
+					<Button
+						className="row-button"
+						bsSize="xsmall"
+						onClick={this.toggleAssignedMedicine.bind(this)}
+					>
+						&#9660;
+					</Button>
+				);
+			}
+		};
 		return (
-			<div>
-				<Row>
-					<Col>
-						{this.state.medicineShow && (
-							<Button
-								onClick={this.toggleAssignedMedicine.bind(this)}
-							>
-								Hide medicine
-							</Button>
-						)}
-						{!this.state.medicineShow && (
-							<Button
-								onClick={this.toggleAssignedMedicine.bind(this)}
-							>
-								Show medicine
-							</Button>
-						)}
-					</Col>
-				</Row>
+			<div class="patient-row">
 				<PatientRow
 					editMode={this.state.editMode}
 					patient={this.state.patient}
@@ -100,12 +105,20 @@ export default class Patient extends React.Component {
 					savePatient={this.savePatient.bind(this)}
 					deletePatient={this.deletePatient.bind(this)}
 					assignMedicine={this.assignMedicine.bind(this)}
-				/>
+				>
+					{showMedicineButton()}
+				</PatientRow>
 
 				{this.state.medicineShow &&
 					this.state.patient.medicine &&
 					this.state.patient.medicine.map(med => {
-						return <MedicineRow key={med.id} medicine={med} />;
+						return (
+							<MedicineRow
+								className={'inner-grid-row'}
+								key={med.id}
+								medicine={med}
+							/>
+						);
 					})}
 			</div>
 		);

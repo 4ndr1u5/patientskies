@@ -15,6 +15,8 @@ export default class Search extends React.Component {
 					this.props.onInputChange(e.target.value);
 				}}
 				value={this.props.query}
+				placeholder={this.props.placeholder}
+				className="search"
 			/>
 		);
 	}

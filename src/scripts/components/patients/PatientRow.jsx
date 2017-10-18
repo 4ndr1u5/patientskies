@@ -30,44 +30,46 @@ export default class PatientRow extends React.Component {
 
   renderEditMode() {
     return (
-      <Row className="show-grid">
-        <Col xs={2} md={2}>
+      <Row className="grid-row">
+        <Col xs={2}>
           <FormControl
             type="text"
             onChange={e => this.onInputChange('firstName', e.target.value)}
             value={this.state.patient.firstName}
           />
         </Col>
-        <Col xs={2} md={2}>
+        <Col xs={2}>
           <FormControl
             type="text"
             onChange={e => this.onInputChange('lastName', e.target.value)}
             value={this.state.patient.lastName}
           />
         </Col>
-        <Col xs={2} md={2}>
+        <Col xs={2}>
           <FormControl
             type="text"
             onChange={e => this.onInputChange('email', e.target.value)}
             value={this.state.patient.email}
           />
         </Col>
-        <Col xs={2} md={2}>
+        <Col xs={2}>
           <FormControl
             type="text"
             onChange={e => this.onInputChange('dateOfBirth', e.target.value)}
             value={this.state.patient.dateOfBirth}
           />
         </Col>
-        <Col xs={2} md={2}>
+        <Col xs={2}>
           <FormControl
             type="text"
             onChange={e => this.onInputChange('phoneNumber', e.target.value)}
             value={this.state.patient.phoneNumber}
           />
         </Col>
-        <Col xs={2} md={2}>
+        <Col xs={2}>
           <Button
+            className="row-button"
+            bsSize="xsmall"
             onClick={() => {
               this.props.savePatient(this.state.patient);
             }}
@@ -81,32 +83,37 @@ export default class PatientRow extends React.Component {
 
   renderViewMode() {
     return (
-      <Row className="show-grid">
-        <Col xs={2} md={2}>
-          {this.state.patient.firstName}
-        </Col>
-        <Col xs={2} md={2}>
-          {this.state.patient.lastName}
-        </Col>
-        <Col xs={2} md={2}>
-          {this.state.patient.email}
-        </Col>
-        <Col xs={2} md={2}>
-          {this.state.patient.dateOfBirth}
-        </Col>
-        <Col xs={2} md={2}>
-          {this.state.patient.phoneNumber}
-        </Col>
-        <Col xs={2} md={2}>
+      <Row className="grid-row">
+        <Col xs={2}>{this.state.patient.firstName}</Col>
+        <Col xs={2}>{this.state.patient.lastName}</Col>
+        <Col xs={2}>{this.state.patient.email}</Col>
+        <Col xs={2}>{this.state.patient.dateOfBirth}</Col>
+        <Col xs={2}>{this.state.patient.phoneNumber}</Col>
+        <Col xs={2}>
           {this.props.actions === 'CRUD' && (
             <div>
-              <Button onClick={this.setEditMode.bind(this)}>Edit</Button>
-              <Button onClick={this.props.deletePatient}>Delete</Button>
+              <Button
+                className="row-button"
+                bsSize="xsmall"
+                onClick={this.setEditMode.bind(this)}
+              >
+                Edit
+              </Button>
+              <Button
+                className="row-button"
+                bsSize="xsmall"
+                onClick={this.props.deletePatient}
+              >
+                Delete
+              </Button>
+              {this.props.children}
             </div>
           )}
           {this.props.actions === 'assign' && (
             <div>
               <Button
+                className="row-button"
+                bsSize="xsmall"
                 onClick={() => {
                   this.props.assignMedicine(this.state.patient);
                 }}

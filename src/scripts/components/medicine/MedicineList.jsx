@@ -43,37 +43,26 @@ export default class MedicineList extends React.Component {
   render() {
     return (
       <Grid>
-        <Row className="show-grid">
-          <h2>Medicine</h2>
+        <Row>
+          <h4 class="title">Medicine</h4>
         </Row>
 
-        <Row className="show-grid">
+        <Row>
           <Col xs={12} md={6}>
             <Search
               onInputChange={this.onInputChange.bind(this)}
               query={this.state.query}
+              placeholder={'enter medicine name'}
             />
           </Col>
         </Row>
-        <Row className="show-grid">
-          <Col xs={2} md={2}>
-            productName
-          </Col>
-          <Col xs={2} md={2}>
-            typeName
-          </Col>
-          <Col xs={2} md={2}>
-            form
-          </Col>
-          <Col xs={2} md={2}>
-            atcName
-          </Col>
-          <Col xs={2} md={2}>
-            atcCatName
-          </Col>
-          <Col xs={2} md={2}>
-            Actions
-          </Col>
+        <Row className="header-row">
+          <Col xs={2}>productName</Col>
+          <Col xs={2}>typeName</Col>
+          <Col xs={2}>form</Col>
+          <Col xs={2}>atcName</Col>
+          <Col xs={2}>atcCatName</Col>
+          <Col xs={2}>Actions</Col>
         </Row>
         {this.state.medicine.map(med => {
           return (
