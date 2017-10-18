@@ -25,11 +25,14 @@ export default class MedicineList extends React.Component {
           this.setState({
             medicine: body.map(med => {
               return {
+                id: med.id,
                 productName: med.productName,
                 typeName: med.typeName,
                 form: med.form,
                 atcName: med.atcName,
                 atcCatName: med.atcCatName,
+                substanceName: med.substanceName,
+                units: med.units,
               };
             }),
           });
@@ -48,6 +51,7 @@ export default class MedicineList extends React.Component {
         <Row className="show-grid">
           <h2>Medicine</h2>
         </Row>
+
         <Row className="show-grid">
           <Col xs={12} md={6}>
             <Search
@@ -77,7 +81,13 @@ export default class MedicineList extends React.Component {
           </Col>
         </Row>
         {this.state.medicine.map(med => {
-          return <MedicineRow medicine={med} />;
+          return (
+            <MedicineRow
+              key={med.id}
+              onMedicineAssign={this.props.onMedicineAssign}
+              medicine={med}
+            />
+          );
         })}
       </Grid>
     );

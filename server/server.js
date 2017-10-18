@@ -6,9 +6,10 @@ const bodyParser = require('body-parser');
 const request = require('request');
 
 //Set up default mongoose connection
-var mongoDB = 'mongodb://paprikosas:vienas11@ds121575.mlab.com:21575/patientskies';
+var mongoDB =
+    'mongodb://paprikosas:vienas11@ds121575.mlab.com:21575/patientskies';
 mongoose.connect(mongoDB, {
-    useMongoClient: true
+    useMongoClient: true,
 });
 
 //Get the default connection
@@ -18,15 +19,21 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "DELETE");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept',
+    );
+    res.header('Access-Control-Allow-Methods', 'DELETE');
     next();
 });
 app.use(bodyParser.json()); // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
-    extended: true
-}));
+app.use(
+    bodyParser.urlencoded({
+        // to support URL-encoded bodies
+        extended: true,
+    }),
+);
 
 app.get('/', function(req, res) {
     console.log('Got a GET request');
@@ -35,24 +42,40 @@ app.get('/', function(req, res) {
 
 var Schema = mongoose.Schema;
 
+var Medicine = new Schema({
+    id: { type: String },
+    typeName: { type: String },
+    typeId: { type: String },
+    atcId: { type: String },
+    atcCatName: { type: String },
+    atcName: { type: String },
+    substanceName: { type: String },
+    productName: { type: String },
+    form: { type: String },
+    strength: { type: String },
+    units: { type: String },
+});
+
 var Patient = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true },
     dateOfBirth: { type: String, required: true },
-    phoneNumber: { type: String, required: true }
+    phoneNumber: { type: String, required: true },
+    medicine: [Medicine],
 });
 
 var PatientModel = mongoose.model('Patient', Patient);
 
 app.get('/patients', function(req, res) {
-
     return PatientModel.find(function(err, patients) {
         if (!err) {
-            res.send(JSON.stringify({
-                patients: patients,
-                title: 'Patients'
-            }));
+            res.send(
+                JSON.stringify({
+                    patients: patients,
+                    title: 'Patients',
+                }),
+            );
         } else {
             return console.log(err);
         }
@@ -62,17 +85,19 @@ app.get('/patients', function(req, res) {
 app.get('/patients/add', function(req, res) {
     var patient_data = {
         // _id: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        dateOfBirth: "",
-        phoneNumber: ""
+        firstName: '',
+        lastName: '',
+        email: '',
+        dateOfBirth: '',
+        phoneNumber: '',
     };
 
-    res.send(JSON.stringify({
-        title: 'Patient data',
-        patient: patient_data
-    }));
+    res.send(
+        JSON.stringify({
+            title: 'Patient data',
+            patient: patient_data,
+        }),
+    );
 });
 
 app.post('/patients/add', function(req, res) {
@@ -83,16 +108,18 @@ app.post('/patients/add', function(req, res) {
         lastName: req.body.lastName,
         email: req.body.email,
         dateOfBirth: req.body.dateOfBirth,
-        phoneNumber: req.body.phoneNumber
+        phoneNumber: req.body.phoneNumber,
     });
 
     patient.save(function(err) {
         if (!err) {
-            console.log("created");
-            return res.send(JSON.stringify({
-                status: 'success',
-                data: patient
-            }));
+            console.log('created');
+            return res.send(
+                JSON.stringify({
+                    status: 'success',
+                    data: patient,
+                }),
+            );
         } else {
             return console.log(err);
         }
@@ -102,11 +129,12 @@ app.post('/patients/add', function(req, res) {
 app.get('/patients/:id', function(req, res) {
     return PatientModel.findById(req.params.id, function(err, patient_data) {
         if (!err) {
-            res.send(JSON.stringify({
-                title: 'Patient data',
-                patient: patient_data
-            }));
-
+            res.send(
+                JSON.stringify({
+                    title: 'Patient data',
+                    patient: patient_data,
+                }),
+            );
         } else {
             console.log(err);
         }
@@ -122,11 +150,13 @@ app.post('/patients/:id', function(req, res) {
         patient_data.phoneNumber = req.body.phoneNumber;
         return patient_data.save(function(err) {
             if (!err) {
-                console.log("updated");
-                return res.send(JSON.stringify({
-                    status: 'success',
-                    data: patient_data
-                }));
+                console.log('updated');
+                return res.send(
+                    JSON.stringify({
+                        status: 'success',
+                        data: patient_data,
+                    }),
+                );
             } else {
                 return console.log(err);
             }
@@ -136,48 +166,79 @@ app.post('/patients/:id', function(req, res) {
 });
 
 app.get('/patients/search/:query', function(req, res) {
-    return PatientModel.find({
-            $or: [{ firstName: req.params.query }, { lastName: req.params.query }, { email: req.params.query }]
+    return PatientModel.find(
+        {
+            $or: [
+                { firstName: req.params.query },
+                { lastName: req.params.query },
+                { email: req.params.query },
+            ],
         },
         function(err, patients) {
             if (!err) {
-                return res.send(JSON.stringify({
-                    patients: patients,
-                    title: 'Patients'
-                }));
+                return res.send(
+                    JSON.stringify({
+                        patients: patients,
+                        title: 'Patients',
+                    }),
+                );
             } else {
                 return console.log(err);
             }
-        });
+        },
+    );
 });
 
-
 app.delete('/patients/:id', function(req, res) {
-console.log("DELETE", req.params.id)
-    return PatientModel.findById(req.params.id)
-        .exec(function(err, doc) {
-            if (err || !doc) {
-                res.statusCode = 404;
-                res.send({});
-            } else {
-                doc.remove(function(err) {
-                    if (err) {
-                        res.statusCode = 403;
-                        res.send(err);
-                    } else {
-                        res.send({});
-                    }
-                });
-            }
-        });
+    console.log('DELETE', req.params.id);
+    return PatientModel.findById(req.params.id).exec(function(err, doc) {
+        if (err || !doc) {
+            res.statusCode = 404;
+            res.send({});
+        } else {
+            doc.remove(function(err) {
+                if (err) {
+                    res.statusCode = 403;
+                    res.send(err);
+                } else {
+                    res.send({});
+                }
+            });
+        }
+    });
 });
 
 app.get('/medicine/:query', function(req, res) {
     return request({
-        uri: 'https://fest-searcher.herokuapp.com/api/fest/s/' + req.params.query,
+        uri:
+            'https://fest-searcher.herokuapp.com/api/fest/s/' +
+            req.params.query,
     }).pipe(res);
 });
 
+app.post('/medicine/assign', function(req, res) {
+    console.log(req.params);
+    return PatientModel.findById(req.body.patient._id, function(
+        err,
+        patient_data,
+    ) {
+        patient_data.medicine.push(req.body.medicine);
+        return patient_data.save(function(err) {
+            if (!err) {
+                console.log('updated');
+                return res.send(
+                    JSON.stringify({
+                        status: 'success',
+                        data: patient_data,
+                    }),
+                );
+            } else {
+                return console.log(err);
+            }
+            res.redirect('/patients/', 301);
+        });
+    });
+});
 
 app.listen(3000, function() {
     console.log('Example app listening on port 3000!');

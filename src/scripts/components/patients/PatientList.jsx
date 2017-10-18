@@ -41,12 +41,36 @@ export default class PatientList extends React.Component {
     this.setState({ createPatient: true });
   }
 
+  assignMedicine(patient) {
+    fetch('http://localhost:3000/medicine/assign', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        medicine: this.props.medicineForAssign,
+        patient: patient,
+      }),
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(body => {
+        console.log(body);
+      });
+  }
+
   render() {
     return (
       <Grid>
         <Row className="show-grid">
           <h2>Patients</h2>
         </Row>
+        {this.props.medicineForAssign && (
+          <Row className="show-grid">
+            <h4>Assign {this.props.medicineForAssign.productName} to</h4>
+          </Row>
+        )}
         <Row className="show-grid">
           <Col xs={10} md={6}>
             <Search
@@ -54,9 +78,13 @@ export default class PatientList extends React.Component {
               query={this.state.query}
             />
           </Col>
-          <Col xs={2} md={2}>
-            <Button onClick={this.createPatient.bind(this)}>Create new</Button>
-          </Col>
+          {!this.props.medicineForAssign && (
+            <Col xs={2} md={2}>
+              <Button onClick={this.createPatient.bind(this)}>
+                Create new
+              </Button>
+            </Col>
+          )}
         </Row>
         <Row className="show-grid">
           <Col xs={2} md={2}>
@@ -82,7 +110,15 @@ export default class PatientList extends React.Component {
           <PatientRow patient={{}} editMode={true} />
         ) : null}
         {this.state.patients.map(patient => {
-          return <PatientRow patient={patient} editMode={false} />;
+          return (
+            <PatientRow
+              key={patient._id}
+              patient={patient}
+              editMode={false}
+              assignMedicine={this.assignMedicine.bind(this)}
+              actions={this.props.medicineForAssign ? 'assign' : 'CRUD'}
+            />
+          );
         })}
       </Grid>
     );

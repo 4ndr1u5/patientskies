@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col, Button, FormControl } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 
 export default class PatientRow extends React.Component {
   constructor(props) {
@@ -10,6 +11,17 @@ export default class PatientRow extends React.Component {
   }
 
   render() {
+    const AssignButton = withRouter(({ history }) => (
+      <Button
+        onClick={() => {
+          this.props.onMedicineAssign(this.state.medicine);
+          history.push('/medicine/assign');
+        }}
+      >
+        Assign
+      </Button>
+    ));
+
     return (
       <Row className="show-grid">
         <Col xs={2} md={2}>
@@ -28,7 +40,7 @@ export default class PatientRow extends React.Component {
           {this.state.medicine.atcCatName}
         </Col>
         <Col xs={2} md={2}>
-          Action
+          <AssignButton />
         </Col>
       </Row>
     );
