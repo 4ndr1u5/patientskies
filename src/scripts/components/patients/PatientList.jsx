@@ -8,7 +8,11 @@ import { debounce } from 'lodash';
 export default class PatientList extends React.Component {
   constructor() {
     super();
-    this.state = { query: '', patients: [], createPatient: false };
+    this.state = {
+      query: '',
+      patients: [],
+      newPatients: [],
+    };
   }
 
   componentDidMount() {
@@ -38,7 +42,9 @@ export default class PatientList extends React.Component {
   }
 
   createPatient() {
-    this.setState({ createPatient: true });
+    let newPatients = Array.from(this.state.newPatients);
+    newPatients.push({});
+    this.setState({ newPatients: newPatients });
   }
 
   assignMedicine(patient) {
@@ -106,9 +112,10 @@ export default class PatientList extends React.Component {
             Actions
           </Col>
         </Row>
-        {this.state.createPatient ? (
-          <Patient patient={{}} editMode={true} />
-        ) : null}
+
+        {this.state.newPatients.map(patient => {
+          return <Patient patient={patient} editMode={true} actions={'CRUD'} />;
+        })}
         {this.state.patients.map(patient => {
           return (
             <Patient
