@@ -39,8 +39,9 @@ export default class PatientRow extends React.Component {
         <Col xs={2} md={2}>
           {this.state.medicine.atcCatName}
         </Col>
+
         <Col xs={2} md={2}>
-          <AssignButton />
+          {this.props.onMedicineAssign && <AssignButton />}
         </Col>
       </Row>
     );

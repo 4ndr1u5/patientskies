@@ -1,5 +1,5 @@
 import React from 'react';
-import PatientRow from './PatientRow.jsx';
+import Patient from './Patient.jsx';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
 import { browserHistory } from 'react-router-dom';
 import Search from '../common/Search.jsx';
@@ -107,11 +107,11 @@ export default class PatientList extends React.Component {
           </Col>
         </Row>
         {this.state.createPatient ? (
-          <PatientRow patient={{}} editMode={true} />
+          <Patient patient={{}} editMode={true} />
         ) : null}
         {this.state.patients.map(patient => {
           return (
-            <PatientRow
+            <Patient
               key={patient._id}
               patient={patient}
               editMode={false}
