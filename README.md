@@ -11,12 +11,11 @@ cd server
 npm install
 node server.js
 ```
-server is running on port 3000
-now 
+server is running on port 3000. Now start the app 
 ```
 cd ..
 npm install
-npm start run
+npm run start
 ```
 go to http://localhost:8080/
 enjoy!
