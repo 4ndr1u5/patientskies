@@ -5,15 +5,14 @@ clone repo
 git clone https://github.com/4ndr1u5/patientskies.git
 cd patientskies
 ```
-first, start server
+first, start the server
 ```
 cd server
 npm install
 node server.js
 ```
-server is running on port 3000. Now start the app 
+server is running on port 3000. Now start the app. In another terminal window
 ```
-cd ..
 npm install
 npm run start
 ```
