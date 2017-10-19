@@ -24,6 +24,7 @@ export default class Main extends React.Component {
       <BrowserRouter history={browserHistory}>
         <div>
           <Menu />
+          <Route exact path="/" component={PatientList} />
           <Route exact path="/patients" component={PatientList} />
           <Switch>
             <Route
