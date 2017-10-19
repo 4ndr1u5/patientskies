@@ -9,56 +9,48 @@ import Menu from './components/common/Menu.jsx';
 import MedicineList from './components/medicine/MedicineList.jsx';
 
 export default class Main extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			medicineForAssign: {},
-		};
-	}
-	onMedicineAssign(medicine) {
-		this.setState({ medicineForAssign: medicine });
-	}
+  constructor() {
+    super();
+    this.state = {
+      medicineForAssign: {},
+    };
+  }
+  onMedicineAssign(medicine) {
+    this.setState({ medicineForAssign: medicine });
+  }
 
-	render() {
-		const AssignMedicineToPatientList = () => {
-			return <PatientList />;
-		};
-
-		return (
-			<BrowserRouter history={browserHistory}>
-				<div>
-					<Menu />
-					<Route exact path="/patients" component={PatientList} />
-					<Switch>
-						<Route
-							exact
-							path="/medicine"
-							render={props => (
-								<MedicineList
-									{...props}
-									onMedicineAssign={this.onMedicineAssign.bind(
-										this,
-									)}
-								/>
-							)}
-						/>
-						<Route
-							exact
-							path="/medicine/assign"
-							render={props => (
-								<PatientList
-									{...props}
-									medicineForAssign={
-										this.state.medicineForAssign
-									}
-								/>
-							)}
-						/>
-					</Switch>
-				</div>
-			</BrowserRouter>
-		);
-	}
+  render() {
+    return (
+      <BrowserRouter history={browserHistory}>
+        <div>
+          <Menu />
+          <Route exact path="/patients" component={PatientList} />
+          <Switch>
+            <Route
+              exact
+              path="/medicine"
+              render={props => (
+                <MedicineList
+                  {...props}
+                  onMedicineAssign={this.onMedicineAssign.bind(this)}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/medicine/assign"
+              render={props => (
+                <PatientList
+                  {...props}
+                  medicineForAssign={this.state.medicineForAssign}
+                />
+              )}
+            />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    );
+  }
 }
 
 ReactDOM.render(<Main />, document.getElementById('main-container'));

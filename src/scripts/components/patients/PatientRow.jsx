@@ -17,7 +17,7 @@ export default class PatientRow extends React.Component {
   }
 
   onInputChange(prop, val) {
-    let patient = Object.assign({}, this.state.patient);
+    const patient = Object.assign({}, this.state.patient);
     patient[prop] = val;
     this.setState({ patient });
   }

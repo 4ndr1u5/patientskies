@@ -1,10 +1,12 @@
-import React from 'react';
-import Patient from './Patient.jsx';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
-import { browserHistory } from 'react-router-dom';
-import Search from '../common/Search.jsx';
 import { debounce } from 'lodash';
-import PatientApi from '../../api/patient.js';
+
+import React from 'react';
+
+import Patient from './Patient.jsx';
+import Search from '../common/Search.jsx';
+
+import PatientApi from '../../api/patient';
 
 export default class PatientList extends React.Component {
   constructor() {
@@ -17,10 +19,10 @@ export default class PatientList extends React.Component {
   }
 
   componentDidMount() {
-    this.search = debounce(val => {
+    this.search = debounce(() => {
       PatientApi.getAllPatients(this.state.query, patients => {
         this.setState({
-          patients: patients,
+          patients,
         });
       });
     }, 1000);
@@ -33,16 +35,16 @@ export default class PatientList extends React.Component {
   }
 
   createPatient() {
-    let newPatients = Array.from(this.state.newPatients);
+    const newPatients = Array.from(this.state.newPatients);
     newPatients.push({});
-    this.setState({ newPatients: newPatients });
+    this.setState({ newPatients });
   }
 
   render() {
     return (
       <Grid>
         <Row>
-          <h4 class="title">Patients</h4>
+          <h4 className="title">Patients</h4>
         </Row>
         {this.props.medicineForAssign && (
           <Row>
@@ -74,20 +76,23 @@ export default class PatientList extends React.Component {
           <Col xs={2}>Actions</Col>
         </Row>
 
-        {this.state.newPatients.map(patient => {
-          return <Patient patient={patient} editMode={true} actions={'CRUD'} />;
-        })}
-        {this.state.patients.map(patient => {
-          return (
-            <Patient
-              key={patient._id}
-              patient={patient}
-              editMode={false}
-              medicineForAssign={this.props.medicineForAssign}
-              actions={this.props.medicineForAssign ? 'assign' : 'CRUD'}
-            />
-          );
-        })}
+        {this.state.newPatients.map(patient => (
+          <Patient
+            key={patient.firstName + patient.lastName}
+            patient={patient}
+            editMode={true}
+            actions={'CRUD'}
+          />
+        ))}
+        {this.state.patients.map(patient => (
+          <Patient
+            key={patient._id}
+            patient={patient}
+            editMode={false}
+            medicineForAssign={this.props.medicineForAssign}
+            actions={this.props.medicineForAssign ? 'assign' : 'CRUD'}
+          />
+        ))}
       </Grid>
     );
   }
