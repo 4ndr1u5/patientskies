@@ -105,7 +105,7 @@ export default class Patient extends React.Component {
           deletePatient={this.deletePatient.bind(this)}
           assignMedicine={this.assignMedicine.bind(this)}
         >
-          {showMedicineButton()}
+          {this.state.patient.medicine.length > 0 && showMedicineButton()}
         </PatientRow>
 
         {this.state.medicineShow &&
