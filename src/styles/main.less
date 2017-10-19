@@ -1,6 +1,7 @@
 /*================ setting variables ==================== */
 @headerColor: #139e80;
 @textColor: #535a5e;
+@secondaryColor: grey;
 @defaultMargin: 15px;
 /*====================== styles ======================= */
 h2 {
@@ -34,15 +35,15 @@ h2 {
 .row-button {
   margin-right: @defaultMargin/2;
 }
-.grid-row {
-  height: 40px;
-}
+
 .inner-grid-row {
-  color: grey;
+  color: @secondaryColor;
   font-size: 0.875em;
 }
+
 .medicine-row,
 .patient-row {
   border-bottom: solid 1px @headerColor;
   margin-top: @defaultMargin/2;
+  min-height: 40px;
 }

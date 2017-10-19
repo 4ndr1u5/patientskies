@@ -78,7 +78,7 @@ export default class PatientList extends React.Component {
 
         {this.state.newPatients.map(patient => (
           <Patient
-            key={patient.firstName + patient.lastName}
+            key={patient._id}
             patient={patient}
             editMode={true}
             actions={'CRUD'}

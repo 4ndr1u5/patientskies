@@ -90,27 +90,26 @@ export default class PatientRow extends React.Component {
         <Col xs={2}>{this.state.patient.dateOfBirth}</Col>
         <Col xs={2}>{this.state.patient.phoneNumber}</Col>
         <Col xs={2}>
-          {this.props.actions === 'CRUD' && (
-            <div>
-              <Button
-                className="row-button"
-                bsSize="xsmall"
-                onClick={this.setEditMode.bind(this)}
-              >
-                Edit
-              </Button>
-              <Button
-                className="row-button"
-                bsSize="xsmall"
-                onClick={this.props.deletePatient}
-              >
-                Delete
-              </Button>
-              {this.props.children}
-            </div>
-          )}
-          {this.props.actions === 'assign' && (
-            <div>
+          <div>
+            {this.props.actions === 'CRUD' && (
+              <div>
+                <Button
+                  className="row-button"
+                  bsSize="xsmall"
+                  onClick={this.setEditMode.bind(this)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  className="row-button"
+                  bsSize="xsmall"
+                  onClick={this.props.deletePatient}
+                >
+                  Delete
+                </Button>
+              </div>
+            )}
+            {this.props.actions === 'assign' && (
               <Button
                 className="row-button"
                 bsSize="xsmall"
@@ -120,8 +119,9 @@ export default class PatientRow extends React.Component {
               >
                 Assign
               </Button>
-            </div>
-          )}
+            )}
+            {this.props.children}
+          </div>
         </Col>
       </Row>
     );
