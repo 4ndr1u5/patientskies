@@ -47,12 +47,12 @@ export default class PatientRow extends React.Component {
   validateField(prop, val) {
     const validationRegexp = {
       firstName: {
-        regexp: new RegExp('^[A-Za-z]{1,16}$'),
-        error: 'First name must be between 1 and 16 letters long',
+        regexp: new RegExp('^[A-Za-z]{2,16}$'),
+        error: 'First name must be between 2 and 16 letters long',
       },
       lastName: {
-        regexp: new RegExp('^[A-Za-z]{0,16}$'),
-        error: 'Last name must be between 1 and 16 letters long',
+        regexp: new RegExp('^[A-Za-z]{2,16}$'),
+        error: 'Last name must be between 2 and 16 letters long',
       },
       email: {
         regexp: new RegExp(
